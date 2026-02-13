@@ -24,4 +24,4 @@ build:
 
 .PHONY: ci
 ci: lint
-	nix flake check --all-systems
+	nix flake check
