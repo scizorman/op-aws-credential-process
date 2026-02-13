@@ -4,8 +4,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    flake-utils.url = "github:numtide/flake-utils";
-
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -16,35 +14,42 @@
     {
       self,
       nixpkgs,
-      flake-utils,
       treefmt-nix,
     }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = import nixpkgs { inherit system; };
-        treefmtEval = treefmt-nix.lib.evalModule pkgs {
+    let
+      forAllSystems = nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed;
+      treefmtEval = forAllSystems (
+        system:
+        treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} {
           projectRootFile = "flake.nix";
           programs.gofmt.enable = true;
           programs.nixfmt.enable = true;
-        };
-      in
-      {
-        packages.default = pkgs.buildGoModule {
+        }
+      );
+    in
+    {
+      packages = forAllSystems (system: {
+        default = nixpkgs.legacyPackages.${system}.buildGoModule {
           pname = "op-aws-credential-helper";
           version = "0.1.0";
           src = ./.;
-          vendorHash = null;
+          vendorHash = "sha256-LE10n2/C51rJA3Mw1meZWFyXogAhmQwbzDfs0cudFwg=";
         };
+      });
 
-        formatter = treefmtEval.config.build.wrapper;
-        checks.formatting = treefmtEval.config.build.check self;
-
-        devShells.default = pkgs.mkShell {
-          packages = [
-            pkgs.go_1_26
+      devShells = forAllSystems (system: {
+        default = nixpkgs.legacyPackages.${system}.mkShell {
+          packages = with nixpkgs.legacyPackages.${system}; [
+            go
+            golangci-lint
           ];
         };
-      }
-    );
+      });
+
+      checks = forAllSystems (system: {
+        formatting = treefmtEval.${system}.config.build.check self;
+      });
+
+      formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
+    };
 }
