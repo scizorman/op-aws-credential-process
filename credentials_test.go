@@ -573,27 +573,6 @@ func TestCachedSessionProvider_RetrieveStsCredentialsCacheMiss(t *testing.T) {
 	}
 }
 
-func TestToCredentialProcessResponse(t *testing.T) {
-	expiration := time.Now().Add(1 * time.Hour)
-	resp := toCredentialProcessResponse(newStsCreds("AKIA", "SECRET", "TOKEN", expiration))
-
-	if resp.Version != 1 {
-		t.Errorf("Version = %d, want 1", resp.Version)
-	}
-	if resp.AccessKeyID != "AKIA" {
-		t.Errorf("AccessKeyID = %q, want %q", resp.AccessKeyID, "AKIA")
-	}
-	if resp.SecretAccessKey != "SECRET" {
-		t.Errorf("SecretAccessKey = %q, want %q", resp.SecretAccessKey, "SECRET")
-	}
-	if resp.SessionToken != "TOKEN" {
-		t.Errorf("SessionToken = %q, want %q", resp.SessionToken, "TOKEN")
-	}
-	if resp.Expiration == nil || !resp.Expiration.Equal(expiration) {
-		t.Errorf("Expiration = %v, want %v", resp.Expiration, expiration)
-	}
-}
-
 var _ aws.CredentialsProvider = (*SessionTokenProvider)(nil)
 var _ aws.CredentialsProvider = (*CachedSessionProvider)(nil)
 var _ StsSessionProvider = (*SessionTokenProvider)(nil)

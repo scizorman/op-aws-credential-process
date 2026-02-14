@@ -13,7 +13,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials/processcreds"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	ststypes "github.com/aws/aws-sdk-go-v2/service/sts/types"
 )
 
 var version = "dev"
@@ -99,20 +98,16 @@ func run() error {
 		return err
 	}
 
-	return json.NewEncoder(os.Stdout).Encode(toCredentialProcessResponse(creds))
-}
-
-const expiryWindow = 5 * time.Minute
-
-func toCredentialProcessResponse(creds *ststypes.Credentials) processcreds.CredentialProcessResponse {
-	return processcreds.CredentialProcessResponse{
+	return json.NewEncoder(os.Stdout).Encode(processcreds.CredentialProcessResponse{
 		Version:         1,
 		AccessKeyID:     aws.ToString(creds.AccessKeyId),
 		SecretAccessKey: aws.ToString(creds.SecretAccessKey),
 		SessionToken:    aws.ToString(creds.SessionToken),
 		Expiration:      creds.Expiration,
-	}
+	})
 }
+
+const expiryWindow = 5 * time.Minute
 
 func cacheDir() (string, error) {
 	dir := os.Getenv("XDG_CACHE_HOME")
