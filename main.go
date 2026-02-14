@@ -85,7 +85,7 @@ func run() error {
 	resp := processcreds.CredentialProcessResponse{
 		Version:         1,
 		AccessKeyID:     aws.ToString(out.Credentials.AccessKeyId),
-		SecretAccessKey: aws.ToString(out.Credentials.AccessKeyId),
+		SecretAccessKey: aws.ToString(out.Credentials.SecretAccessKey),
 		SessionToken:    aws.ToString(out.Credentials.SessionToken),
 		Expiration:      out.Credentials.Expiration,
 	}
