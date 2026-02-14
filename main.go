@@ -37,8 +37,8 @@ type OpAwsItem struct {
 
 func main() {
 	kong.Parse(&cli,
-		kong.Name("op-aws-credential-helper"),
-		kong.Description("AWS credential_process helper that retrieves credentials from 1Password with MFA session caching"),
+		kong.Name("op-aws-credential-process"),
+		kong.Description("AWS credential_process implementation that retrieves credentials from 1Password with MFA session caching"),
 		kong.Vars{"version": version},
 	)
 

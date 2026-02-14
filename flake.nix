@@ -1,5 +1,5 @@
 {
-  description = "AWS credential_process helper that retrieves credentials from 1Password with MFA session caching";
+  description = "AWS credential_process implementation that retrieves credentials from 1Password with MFA session caching";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -34,7 +34,7 @@
     {
       packages = forAllSystems (system: {
         default = nixpkgs.legacyPackages.${system}.buildGoModule rec {
-          pname = "op-aws-credential-helper";
+          pname = "op-aws-credential-process";
           version = "0.1.0";
           src = ./.;
           vendorHash = "sha256-UF0NkoWKLoODdcq+mwgcFatEaLeF+ee+wa+/dwot2RM=";

@@ -81,7 +81,7 @@ type CachedSessionProvider struct {
 }
 
 func (c *CachedSessionProvider) cachePath() string {
-	return filepath.Join(c.CacheDir, "op-aws-credential-helper", c.Profile+".json")
+	return filepath.Join(c.CacheDir, "op-aws-credential-process", c.Profile+".json")
 }
 
 func (c *CachedSessionProvider) now() time.Time {

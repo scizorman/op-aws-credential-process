@@ -1,4 +1,4 @@
-# op-aws-credential-helper
+# op-aws-credential-process
 
 A `credential_process` helper for AWS CLI. Retrieves AWS credentials from 1Password, performs MFA authentication, and returns temporary credentials.
 

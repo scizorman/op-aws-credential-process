@@ -1,6 +1,6 @@
-# op-aws-credential-helper
+# op-aws-credential-process
 
-AWS credential_process helper that retrieves credentials from 1Password with MFA session caching.
+AWS credential_process implementation that retrieves credentials from 1Password with MFA session caching.
 
 This tool retrieves IAM credentials stored in 1Password, performs MFA authentication, and obtains temporary credentials via AWS STS.
 It implements the `credential_process` protocol, making it compatible with not only the AWS CLI but also Terraform, boto3, and any other tool that uses the AWS SDK.
@@ -18,14 +18,14 @@ Temporary credentials are cached per profile and reused until expiration.
 
 Download the binary for your platform from the latest release.
 
-https://github.com/scizorman/op-aws-credential-helper/releases
+https://github.com/scizorman/op-aws-credential-process/releases
 
 ### go install
 
 Requires Go 1.25+.
 
 ```bash
-go install github.com/scizorman/op-aws-credential-helper@latest
+go install github.com/scizorman/op-aws-credential-process@latest
 ```
 
 ## Setup
@@ -45,11 +45,11 @@ Configure `~/.aws/config` as follows:
 [profile example]
 region = ap-northeast-1
 mfa_serial = arn:aws:iam::123456789012:mfa/user
-credential_process = op-aws-credential-helper --op-vault <vault> --op-item <item>
+credential_process = op-aws-credential-process --op-vault <vault> --op-item <item>
 ```
 
 `mfa_serial` is the ARN of the MFA device assigned to your IAM user.
-`credential_process` specifies the command line for op-aws-credential-helper.
+`credential_process` specifies the command line for op-aws-credential-process.
 
 #### WSL
 
@@ -59,7 +59,7 @@ On WSL, you can use the Windows-side 1Password CLI by specifying the path with `
 [profile example]
 region = ap-northeast-1
 mfa_serial = arn:aws:iam::123456789012:mfa/user
-credential_process = op-aws-credential-helper --op-vault <vault> --op-item <item> --op-cli-path /mnt/c/Program\ Files/1Password\ CLI/op.exe
+credential_process = op-aws-credential-process --op-vault <vault> --op-item <item> --op-cli-path /mnt/c/Program\ Files/1Password\ CLI/op.exe
 ```
 
 This allows you to leverage Windows Hello biometric authentication from WSL.
@@ -90,7 +90,7 @@ This allows you to leverage Windows Hello biometric authentication from WSL.
 
 Temporary credentials are cached per profile.
 
-- **Cache location**: `$XDG_CACHE_HOME/op-aws-credential-helper/<profile>.json` (defaults to `~/.cache/op-aws-credential-helper/<profile>.json`)
+- **Cache location**: `$XDG_CACHE_HOME/op-aws-credential-process/<profile>.json` (defaults to `~/.cache/op-aws-credential-process/<profile>.json`)
 - **Cache granularity**: One file per profile
 - **Cache invalidation**:
   - When configuration parameters (vault, item, mfa_serial, field names) change
@@ -98,8 +98,8 @@ Temporary credentials are cached per profile.
 
 ## Comparison
 
-| Aspect | aws-vault | 1Password Shell Plugin | op-aws-credential-helper |
-|--------|-----------|----------------------|--------------------------|
+| Aspect | aws-vault | 1Password Shell Plugin | op-aws-credential-process |
+|--------|-----------|----------------------|---------------------------|
 | Credential Storage | OS keystore | 1Password | 1Password |
 | Injection Method | credential_process / env vars | env vars | credential_process |
 | Tool Support | All credential_process tools | Plugin-supported commands only | All credential_process tools |

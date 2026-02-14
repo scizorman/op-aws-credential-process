@@ -1,4 +1,4 @@
-module github.com/scizorman/op-aws-credential-helper
+module github.com/scizorman/op-aws-credential-process
 
 go 1.25
 

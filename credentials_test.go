@@ -454,7 +454,7 @@ func TestCachedSessionProvider_InnerError(t *testing.T) {
 
 func TestCachedSessionProvider_CacheWriteFailureIsNonFatal(t *testing.T) {
 	cacheDir := t.TempDir()
-	blockingPath := filepath.Join(cacheDir, "op-aws-credential-helper")
+	blockingPath := filepath.Join(cacheDir, "op-aws-credential-process")
 	if err := os.WriteFile(blockingPath, []byte("not-a-directory"), 0600); err != nil {
 		t.Fatalf("failed to create blocking file: %v", err)
 	}
@@ -496,7 +496,7 @@ func TestCachedSessionProvider_CacheDirectoryCreated(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	dir := filepath.Join(cacheDir, "op-aws-credential-helper")
+	dir := filepath.Join(cacheDir, "op-aws-credential-process")
 	info, err := os.Stat(dir)
 	if err != nil {
 		t.Fatalf("cache directory was not created: %v", err)
@@ -508,8 +508,8 @@ func TestCachedSessionProvider_CacheDirectoryCreated(t *testing.T) {
 
 func TestCachedSessionProvider_CachePath(t *testing.T) {
 	provider := &CachedSessionProvider{CacheDir: "/tmp/cache", Profile: "dev"}
-	if got := provider.cachePath(); got != "/tmp/cache/op-aws-credential-helper/dev.json" {
-		t.Errorf("cachePath = %q, want %q", got, "/tmp/cache/op-aws-credential-helper/dev.json")
+	if got := provider.cachePath(); got != "/tmp/cache/op-aws-credential-process/dev.json" {
+		t.Errorf("cachePath = %q, want %q", got, "/tmp/cache/op-aws-credential-process/dev.json")
 	}
 }
 
