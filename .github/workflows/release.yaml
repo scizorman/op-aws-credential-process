@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: 'Release'
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions: {}
+
+jobs:
+  release:
+    runs-on: 'ubuntu-latest'
+    permissions:
+      contents: 'write'
+    steps:
+      - uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: 'cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15' # v31
+      - run: |
+          nix develop --command goreleaser release --clean
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'

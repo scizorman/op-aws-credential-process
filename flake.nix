@@ -33,11 +33,16 @@
     in
     {
       packages = forAllSystems (system: {
-        default = nixpkgs.legacyPackages.${system}.buildGoModule {
+        default = nixpkgs.legacyPackages.${system}.buildGoModule rec {
           pname = "op-aws-credential-helper";
           version = "0.1.0";
           src = ./.;
           vendorHash = "sha256-UF0NkoWKLoODdcq+mwgcFatEaLeF+ee+wa+/dwot2RM=";
+          ldflags = [
+            "-s"
+            "-w"
+            "-X main.version=${version}"
+          ];
         };
       });
 
@@ -46,6 +51,7 @@
           packages = with nixpkgs.legacyPackages.${system}; [
             go
             golangci-lint
+            goreleaser
           ];
         };
       });
