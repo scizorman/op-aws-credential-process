@@ -3,18 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
     {
       self,
       nixpkgs,
-      treefmt-nix,
     }:
     let
       forAllSystems = nixpkgs.lib.genAttrs [
@@ -22,14 +16,6 @@
         "aarch64-linux"
         "aarch64-darwin"
       ];
-      treefmtEval = forAllSystems (
-        system:
-        treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} {
-          projectRootFile = "flake.nix";
-          programs.gofmt.enable = true;
-          programs.nixfmt.enable = true;
-        }
-      );
     in
     {
       packages = forAllSystems (system: {
@@ -52,15 +38,9 @@
             go
             golangci-lint
             goreleaser
+            nixfmt
           ];
         };
       });
-
-      checks = forAllSystems (system: {
-        formatting = treefmtEval.${system}.config.build.check self;
-        package = self.packages.${system}.default;
-      });
-
-      formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
     };
 }

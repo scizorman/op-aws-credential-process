@@ -4,7 +4,7 @@ all:
 
 .PHONY: clean
 clean:
-	$(RM) -r result
+	$(RM) -r dist result
 
 .PHONY: lint
 lint:
@@ -12,16 +12,21 @@ lint:
 
 .PHONY: fmt
 fmt:
-	nix fmt
+	gofmt -w .
+	nixfmt flake.nix
 
 .PHONY: test
 test:
 	go test -v ./...
 
-.PHONY: build
-build:
+.PHONY: release
+release:
+	goreleaser release --clean --snapshot
+
+.PHONY: derivation
+derivation:
 	nix build
 
 .PHONY: ci
-ci: lint
-	nix flake check
+ci: lint fmt test
+	git diff --exit-code

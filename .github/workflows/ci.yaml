@@ -16,7 +16,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ci:
+  go:
+    runs-on: 'ubuntu-24.04'
+    permissions:
+      contents: 'read'
+    timeout-minutes: 5
+    steps:
+      - uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # v4
+        with:
+          persist-credentials: false
+      - uses: 'cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15' # v31
+      - run: |
+          nix develop --command make ci
+  nix:
     runs-on: '${{ matrix.os }}'
     permissions:
       contents: 'read'
@@ -33,4 +45,5 @@ jobs:
         with:
           persist-credentials: false
       - uses: 'cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15' # v31
-      - run: nix develop --command make ci
+      - run: |
+          make derivation
