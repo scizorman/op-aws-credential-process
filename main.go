@@ -22,8 +22,8 @@ var cli struct {
 	Duration               time.Duration    `default:"12h" help:"STS session duration."`
 	OpVault                string           `required:"" help:"1Password vault name."`
 	OpItem                 string           `required:"" help:"1Password item name."`
-	OpAccessKeyIDField     string           `default:"username" help:"1Password field name for access key ID." name:"op-access-key-id-field"`
-	OpSecretAccessKeyField string           `default:"credential" help:"1Password field name for secret access key." name:"op-secret-access-key-field"`
+	OpAccessKeyIDField     string           `default:"Access key ID" help:"1Password field name for access key ID." name:"op-access-key-id-field"`
+	OpSecretAccessKeyField string           `default:"Secret access key" help:"1Password field name for secret access key." name:"op-secret-access-key-field"`
 	OpCLIPath              string           `default:"op" help:"Path to 1Password CLI." name:"op-cli-path"`
 	Version                kong.VersionFlag `help:"Show version."`
 }
