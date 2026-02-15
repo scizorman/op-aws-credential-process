@@ -234,6 +234,36 @@ func TestSessionTokenProvider_BaseCredsError(t *testing.T) {
 	}
 }
 
+func TestSessionTokenProvider_MfaSerialEmpty(t *testing.T) {
+	baseCreds := &fakeCredsProvider{}
+	otpSource := &fakeOTPSource{otp: "123456"}
+	stsClient := &fakeSTSClient{}
+	provider := &SessionTokenProvider{
+		BaseCredsProvider: baseCreds,
+		OTPSource:         otpSource,
+		StsClient:         stsClient,
+		MfaSerial:         "",
+		Duration:          12 * time.Hour,
+	}
+
+	_, err := provider.RetrieveStsCredentials(context.Background())
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if err.Error() != "mfa_serial is not set; this tool requires an MFA device" {
+		t.Errorf("error = %q, want %q", err.Error(), "mfa_serial is not set; this tool requires an MFA device")
+	}
+	if baseCreds.called != 0 {
+		t.Errorf("baseCreds.called = %d, want 0", baseCreds.called)
+	}
+	if otpSource.called != 0 {
+		t.Errorf("otpSource.called = %d, want 0", otpSource.called)
+	}
+	if stsClient.lastInput != nil {
+		t.Error("StsClient.GetSessionToken should not have been called")
+	}
+}
+
 func TestCachedSessionProvider_NoCacheFile(t *testing.T) {
 	cacheDir := t.TempDir()
 	exp := time.Now().Add(1 * time.Hour)

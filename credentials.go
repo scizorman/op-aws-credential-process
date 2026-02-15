@@ -26,6 +26,10 @@ type SessionTokenProvider struct {
 }
 
 func (p *SessionTokenProvider) RetrieveStsCredentials(ctx context.Context) (*ststypes.Credentials, error) {
+	if p.MfaSerial == "" {
+		return nil, errors.New("mfa_serial is not set; this tool requires an MFA device")
+	}
+
 	if _, err := p.BaseCredsProvider.Retrieve(ctx); err != nil {
 		return nil, err
 	}
