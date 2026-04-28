@@ -25,7 +25,7 @@ jobs:
       - uses: 'actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd' # v6
         with:
           persist-credentials: false
-      - uses: 'cachix/install-nix-action@1ca7d21a94afc7c957383a2d217460d980de4934' # v31
+      - uses: 'cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f' # v31
       - run: |
           nix develop --command make ci
   nix:
@@ -44,6 +44,6 @@ jobs:
       - uses: 'actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd' # v6
         with:
           persist-credentials: false
-      - uses: 'cachix/install-nix-action@1ca7d21a94afc7c957383a2d217460d980de4934' # v31
+      - uses: 'cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f' # v31
       - run: |
           make derivation

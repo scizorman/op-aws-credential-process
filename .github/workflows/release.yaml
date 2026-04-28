@@ -18,7 +18,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: 'cachix/install-nix-action@1ca7d21a94afc7c957383a2d217460d980de4934' # v31
+      - uses: 'cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f' # v31
       - run: |
           nix develop --command goreleaser release --clean
         env:
