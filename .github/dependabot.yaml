@@ -1,27 +1,25 @@
 # yaml-language-server: $schema=https://json.schemastore.org/dependabot-2.0.json
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     labels:
-      - "dependencies"
-
-  - package-ecosystem: "gomod"
-    directory: "/"
+      - 'dependencies'
+  - package-ecosystem: 'gomod'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     labels:
-      - "dependencies"
+      - 'dependencies'
     groups:
       aws-sdk-go-v2:
         patterns:
-          - "github.com/aws/aws-sdk-go-v2*"
-
-  - package-ecosystem: "nix"
-    directory: "/"
+          - 'github.com/aws/aws-sdk-go-v2*'
+  - package-ecosystem: 'nix'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     labels:
-      - "dependencies"
+      - 'dependencies'
