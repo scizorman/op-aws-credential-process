@@ -12,7 +12,7 @@ lint:
 
 .PHONY: fmt
 fmt:
-	gofmt -w .
+	go fmt ./...
 	nixfmt flake.nix
 
 .PHONY: test
@@ -26,6 +26,9 @@ release:
 .PHONY: derivation
 derivation:
 	nix build
+
+vendor/modules.txt: go.mod go.sum
+	go mod vendor
 
 .PHONY: ci
 ci: lint fmt test
