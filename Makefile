@@ -6,13 +6,18 @@ all:
 clean:
 	$(RM) -r dist result
 
+.PHONY: deps
+deps: vendor/modules.txt
+vendor/modules.txt: go.mod go.sum
+	go mod vendor
+
 .PHONY: lint
 lint:
 	golangci-lint run ./...
 
 .PHONY: fmt
 fmt:
-	gofmt -w .
+	go fmt ./...
 	nixfmt flake.nix
 
 .PHONY: test
