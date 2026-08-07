@@ -23,7 +23,7 @@
           pname = "op-aws-credential-process";
           version = "0.1.1";
           src = ./.;
-          vendorHash = "sha256-C+678X4MyXTY3ubDrDCEzVeZx8F3yi08HcjpEqOfyfo=";
+          vendorHash = "sha256-aDA/XfeCjwqP+KlJ104XRQ5v1XChtXRtdBzBAoLzzWk=";
           ldflags = [
             "-s"
             "-w"
