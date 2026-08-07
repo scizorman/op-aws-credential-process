@@ -6,6 +6,11 @@ all:
 clean:
 	$(RM) -r dist result
 
+.PHONY: deps
+deps: vendor/modules.txt
+vendor/modules.txt: go.mod go.sum
+	go mod vendor
+
 .PHONY: lint
 lint:
 	golangci-lint run ./...
@@ -26,9 +31,6 @@ release:
 .PHONY: derivation
 derivation:
 	nix build
-
-vendor/modules.txt: go.mod go.sum
-	go mod vendor
 
 .PHONY: ci
 ci: lint fmt test
