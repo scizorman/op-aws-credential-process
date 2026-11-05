@@ -35,14 +35,18 @@ Place files flat in the root package. Split into separate packages only when the
 
 ## Development Commands
 
+Development tools (Go, golangci-lint, nixfmt, goreleaser) are provided by the Nix flake devShell. Do not rely on tools installed outside of it, because their versions may differ.
+
+Inside the devShell (`nix develop` or direnv), run the targets directly. Outside of it (`IN_NIX_SHELL` is unset), prefix every command with `nix develop -c`, e.g. `nix develop -c make ci`. CI runs the same command.
+
 | Target | Description |
 |-----------|------|
 | `make all` | Show Makefile contents (help) |
-| `make clean` | Remove `result` symlink |
+| `make clean` | Remove `dist` and `result` |
+| `make deps` | `go mod vendor` |
 | `make lint` | golangci-lint |
-| `make fmt` | treefmt (gofmt + nixfmt) |
+| `make fmt` | `go fmt` + nixfmt |
 | `make test` | go test |
-| `make build` | nix build |
-| `make ci` | lint + nix flake check |
-
-Development environment is managed with a Nix flake. Enter the devShell with `nix develop` or direnv.
+| `make release` | goreleaser snapshot release |
+| `make derivation` | nix build |
+| `make ci` | lint + fmt + test, then fail if the working tree has diffs |
