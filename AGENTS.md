@@ -33,20 +33,8 @@ Do not use mock generation tools such as mockgen. Write fakes (lightweight worki
 
 Place files flat in the root package. Split into separate packages only when the code outgrows a single package. Do not use the `internal/` directory.
 
-## Development Commands
+## Development
 
-Development tools (Go, golangci-lint, nixfmt, goreleaser) are provided by the Nix flake devShell. Do not rely on tools installed outside of it, because their versions may differ.
+Development tools come from the Nix flake devShell; tools outside it may be missing or at different versions. Run commands through it, e.g. `nix develop -c make test`.
 
-Inside the devShell (`nix develop` or direnv), run the targets directly. Outside of it (`IN_NIX_SHELL` is unset), prefix every command with `nix develop -c`, e.g. `nix develop -c make ci`. CI runs the same command.
-
-| Target | Description |
-|-----------|------|
-| `make all` | Show Makefile contents (help) |
-| `make clean` | Remove `dist` and `result` |
-| `make deps` | `go mod vendor` |
-| `make lint` | golangci-lint |
-| `make fmt` | `go fmt` + nixfmt |
-| `make test` | go test |
-| `make release` | goreleaser snapshot release |
-| `make derivation` | nix build |
-| `make ci` | lint + fmt + test, then fail if the working tree has diffs |
+Verify changes with `nix develop -c make ci`, the same command CI runs.
