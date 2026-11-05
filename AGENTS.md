@@ -1,40 +1,16 @@
-# op-aws-credential-process
+# AGENTS.md
 
-A `credential_process` helper for AWS CLI. Retrieves AWS credentials from 1Password, performs MFA authentication, and returns temporary credentials.
+## Constraints
 
-## Architecture
+- This is an AWS `credential_process` helper. Stdout must contain nothing but the credential JSON; write errors and logs to stderr. The caller captures stdin and stderr, so interactive input (the MFA code) must be read from `/dev/tty`.
+- Fetch secrets by invoking the `op` CLI, not the 1Password Go SDK. The SDK's desktop app integration is beta and does not support WSL.
 
-### External Dependencies
+## Conventions
 
-- `op` (1Password CLI) — Used to retrieve credentials. Invoked as an external command.
-- AWS STS — Uses Go SDK v2 (`github.com/aws/aws-sdk-go-v2`). No dependency on `aws` CLI.
-
-The 1Password Go SDK's desktop app integration is beta and does not support WSL, so we invoke the `op` command externally.
-
-### credential_process Constraints
-
-`credential_process` is a protocol that returns JSON on stdout. Nothing other than credential JSON may be written to stdout. Error messages and debug logs must go to stderr. Since the caller captures stdin and stderr, interactive input requires opening `/dev/tty` directly.
-
-### Design Principles
-
-**Layer Separation**
-
-Separate the presentation layer (CLI argument parsing, config loading, dependency wiring, stdout output) from domain logic. Convert config values into domain types before passing them to the domain layer.
-
-**Interface Criteria**
-
-Only introduce an interface when the implementation detail is outside the Resolver's concern, or when multiple implementations are realistically expected. Do not introduce interfaces based on speculation about future changes.
-
-**Test Doubles**
-
-Do not use mock generation tools such as mockgen. Write fakes (lightweight working implementations) by hand in `_test.go` files.
-
-### Package Policy
-
-Place files flat in the root package. Split into separate packages only when the code outgrows a single package. Do not use the `internal/` directory.
+- Add an interface only when it hides a detail outside the credential logic's concern, or when multiple implementations are realistically expected.
+- Write test doubles as hand-written fakes in `_test.go` files. Do not use mockgen or other generators.
+- Keep all code in the root package. Do not use `internal/`.
 
 ## Development
 
-Development tools come from the Nix flake devShell; tools outside it may be missing or at different versions. Run commands through it, e.g. `nix develop -c make test`.
-
-Verify changes with `nix develop -c make ci`, the same command CI runs.
+Run tools through the Nix devShell, e.g. `nix develop -c make test`. Verify changes with `nix develop -c make ci`, the same command CI runs. It ends with `git diff --exit-code`, so unstaged changes make it fail.
